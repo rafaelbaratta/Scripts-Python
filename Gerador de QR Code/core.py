@@ -42,11 +42,15 @@ class Core:
 
         converted_img = self.img.convert("RGB")
 
-        ctk_img = CTkImage(
-            light_image=converted_img, dark_image=converted_img, size=(220, 220)
-        )
+        ctk_img = CTkImage(light_image=converted_img, dark_image=converted_img, size=(220, 220))
         self.gui.code_label.configure(image=ctk_img)
         self.gui.code_label.configure(text="")
+
+        self.gui.save_button.configure(
+            state="normal",
+            fg_color=self.gui.COLORS["button"],
+            hover_color=self.gui.COLORS["button_hover"],
+        )
 
     def get_file_content(self, file_path):
 

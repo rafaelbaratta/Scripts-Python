@@ -45,9 +45,7 @@ class Gui(ctk.CTk):
         content_container = ctk.CTkFrame(self, fg_color=self.COLORS["primary_bg"])
         content_container.pack(fill="both")
 
-        entry_container = ctk.CTkFrame(
-            content_container, fg_color=self.COLORS["secondary_bg"]
-        )
+        entry_container = ctk.CTkFrame(content_container, fg_color=self.COLORS["secondary_bg"])
         entry_container.pack(fill="x", pady=10, padx=10)
 
         ctk.CTkLabel(
@@ -79,9 +77,7 @@ class Gui(ctk.CTk):
         )
         self.file_button.pack(side="right", pady=(10, 20), padx=(0, 20))
 
-        code_container = ctk.CTkFrame(
-            content_container, fg_color=self.COLORS["secondary_bg"]
-        )
+        code_container = ctk.CTkFrame(content_container, fg_color=self.COLORS["secondary_bg"])
         code_container.pack(fill="x", pady=10, padx=10)
 
         self.code_label = ctk.CTkLabel(
@@ -111,7 +107,7 @@ class Gui(ctk.CTk):
             text="Salvar Código",
             font=self.FONTS["button"],
             text_color=self.COLORS["button_text"],
-            fg_color=self.COLORS["button"],
-            hover_color=self.COLORS["button_hover"],
+            fg_color=self.COLORS["secondary_bg"],
+            state="disabled",
         )
         self.save_button.pack(side="right", pady=10, padx=(0, 70))
