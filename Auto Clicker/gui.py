@@ -47,14 +47,14 @@ class Gui(ctk.CTk):
         content_container.pack(fill="both")
 
         positions_container = ctk.CTkFrame(content_container, fg_color=self.COLORS["secondary_bg"])
-        positions_container.pack(fill="x", pady=10, padx=10)
+        positions_container.pack(fill="x", pady=5, padx=10)
 
         ctk.CTkLabel(
             positions_container,
             text="Pressione o botão para gravar as posições dos cliques",
             font=self.FONTS["text"],
             text_color=self.COLORS["text"],
-        ).pack(pady=10, padx=30)
+        ).pack(pady=5, padx=30)
 
         self.positions_counter = ctk.CTkLabel(
             positions_container,
@@ -64,10 +64,10 @@ class Gui(ctk.CTk):
             text_color=self.COLORS["text"],
             fg_color=self.COLORS["primary_bg"],
         )
-        self.positions_counter.pack(pady=10, padx=30)
+        self.positions_counter.pack(pady=5, padx=30)
 
         positions_buttons_frame = ctk.CTkFrame(positions_container, fg_color="transparent")
-        positions_buttons_frame.pack(fill="x", pady=10, padx=10)
+        positions_buttons_frame.pack(fill="x", pady=5, padx=10)
 
         self.positions_start = ctk.CTkButton(
             positions_buttons_frame,
@@ -106,17 +106,17 @@ class Gui(ctk.CTk):
             text="(As posições podem ser controladas pela tecla 'F1')",
             font=self.FONTS["message"],
             text_color=self.COLORS["text"],
-        ).pack(pady=10, padx=30)
+        ).pack(pady=5, padx=30)
 
         clicker_container = ctk.CTkFrame(content_container, fg_color=self.COLORS["secondary_bg"])
-        clicker_container.pack(fill="x", pady=10, padx=10)
+        clicker_container.pack(fill="x", pady=5, padx=10)
 
         ctk.CTkLabel(
             clicker_container,
             text="Clique nos botões para controlar o 'Auto Clicker'",
             font=self.FONTS["text"],
             text_color=self.COLORS["text"],
-        ).pack(pady=10, padx=30)
+        ).pack(pady=5, padx=30)
 
         self.clicks_counter = ctk.CTkLabel(
             clicker_container,
@@ -126,25 +126,25 @@ class Gui(ctk.CTk):
             text_color=self.COLORS["text"],
             fg_color=self.COLORS["primary_bg"],
         )
-        self.clicks_counter.pack(pady=10, padx=30)
+        self.clicks_counter.pack(pady=5, padx=30)
 
         clicker_speed_frame = ctk.CTkFrame(clicker_container, fg_color="transparent")
         clicker_speed_frame.pack(fill="x", pady=5, padx=10)
 
         self.speed_value = ctk.CTkLabel(
             clicker_speed_frame,
-            text="Velocidade dos cliques: (2.50)",
+            text="Velocidade dos cliques: (5.000)",
             font=self.FONTS["text"],
             text_color=self.COLORS["text"],
         )
         self.speed_value.pack(side="left", padx=(30, 0))
 
-        self.speed_slider = ctk.CTkSlider(clicker_speed_frame, from_=0.01, to=5.0)
+        self.speed_slider = ctk.CTkSlider(clicker_speed_frame, from_=0.005, to=10.0)
         self.speed_slider.pack(fill="x", side="right", padx=(0, 30))
-        self.speed_slider.set(2.5)
+        self.speed_slider.set(5)
 
         clicker_buttons_frame = ctk.CTkFrame(clicker_container, fg_color="transparent")
-        clicker_buttons_frame.pack(fill="x", pady=10, padx=10)
+        clicker_buttons_frame.pack(fill="x", pady=5, padx=10)
 
         self.start_button = ctk.CTkButton(
             clicker_buttons_frame,
@@ -183,4 +183,35 @@ class Gui(ctk.CTk):
             text="(O Clicker pode ser controlado pela tecla 'F2')",
             font=self.FONTS["message"],
             text_color=self.COLORS["text"],
-        ).pack(pady=10, padx=30)
+        ).pack(pady=5, padx=30)
+
+        fixed_clicker_buttons_frame = ctk.CTkFrame(clicker_container, fg_color="transparent")
+        fixed_clicker_buttons_frame.pack(fill="x", pady=5, padx=10)
+
+        self.fixed_clicker_start_button = ctk.CTkButton(
+            fixed_clicker_buttons_frame,
+            height=self.height,
+            text="Iniciar Clicker Fixo na Posição do Mouse",
+            font=self.FONTS["button"],
+            text_color=self.COLORS["button_text"],
+            fg_color=self.COLORS["button"],
+            hover_color=self.COLORS["button_hover"],
+        )
+        self.fixed_clicker_start_button.pack(pady=5)
+
+        self.fixed_clicker_finish_button = ctk.CTkButton(
+            fixed_clicker_buttons_frame,
+            height=self.height,
+            text="Encerrar Clicker Fixo na Posição do Mouse",
+            font=self.FONTS["button"],
+            text_color=self.COLORS["button_text"],
+            fg_color=self.COLORS["button"],
+            hover_color=self.COLORS["button_hover"],
+        )
+
+        ctk.CTkLabel(
+            clicker_container,
+            text="(O Clicker fixo pode ser controlado pela tecla 'F3')",
+            font=self.FONTS["message"],
+            text_color=self.COLORS["text"],
+        ).pack(pady=5, padx=30)

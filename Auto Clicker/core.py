@@ -14,6 +14,7 @@ class Core:
         self.listener = None
 
         self.clicking = False
+        self.fixed_clicking = False
         self.recording = False
 
         self.positions = []
@@ -21,6 +22,7 @@ class Core:
 
         self.position_key = keyboard.Key.f1
         self.clicker_key = keyboard.Key.f2
+        self.fixed_clicker_key = keyboard.Key.f3
 
         self.gui.positions_start.configure(command=self.record_positions)
         self.gui.positions_end.configure(command=lambda: self.end_record_positions("click"))
@@ -29,6 +31,9 @@ class Core:
         self.gui.start_button.configure(command=self.start_clicker)
         self.gui.finish_button.configure(command=self.finish_clicker)
         self.gui.reset_clicks.configure(command=self.reset_clicks)
+
+        self.gui.fixed_clicker_start_button.configure(command=self.start_fixed_clicker)
+        self.gui.fixed_clicker_finish_button.configure(command=self.finish_fixed_clicker)
 
         self.gui.speed_slider.configure(command=self.print_speed_value)
 
@@ -52,9 +57,14 @@ class Core:
                 self.finish_clicker()
             else:
                 self.start_clicker()
+        elif key == self.fixed_clicker_key:
+            if self.fixed_clicking:
+                self.finish_fixed_clicker()
+            else:
+                self.start_fixed_clicker()
 
     def record_positions(self):
-        if self.clicking:
+        if self.clicking or self.fixed_clicking:
             return
 
         self.recording = True
@@ -69,7 +79,7 @@ class Core:
         self.listener.start()
 
     def end_record_positions(self, event):
-        if self.clicking:
+        if self.clicking or self.fixed_clicking:
             return
 
         self.recording = False
@@ -99,7 +109,7 @@ class Core:
         self.gui.positions_counter.configure(text=f"Total de posições: {len(self.positions)}")
 
     def start_clicker(self):
-        if self.recording:
+        if self.recording or self.fixed_clicking:
             return
 
         if not self.positions:
@@ -120,7 +130,7 @@ class Core:
         clicker_thread.start()
 
     def finish_clicker(self):
-        if self.recording:
+        if self.recording or self.fixed_clicking:
             return
 
         self.clicking = False
@@ -149,13 +159,48 @@ class Core:
         self.gui.clicks_counter.configure(text=f"Total de cliques: {self.clicks_counter}")
 
     def print_speed_value(self, value):
-        self.gui.speed_value.configure(text=f"Velocidade dos cliques: ({value:.2f})")
+        self.gui.speed_value.configure(text=f"Velocidade dos cliques: ({value:.3f})")
 
     def cleanup(self):
         self.clicking = False
+        self.fixed_clicking = False
         self.recording = False
 
         if self.listener:
             self.listener.stop()
 
         self.gui.destroy()
+
+    def start_fixed_clicker(self):
+        if self.recording or self.clicking:
+            return
+
+        self.fixed_clicking = True
+
+        self.gui.fixed_clicker_start_button.pack_forget()
+        self.gui.fixed_clicker_finish_button.pack(pady=5)
+
+        clicker_thread = threading.Thread(target=self.fixed_clicker)
+        clicker_thread.daemon = True
+        clicker_thread.start()
+
+    def finish_fixed_clicker(self):
+        if self.recording or self.clicking:
+            return
+
+        self.fixed_clicking = False
+
+        self.gui.fixed_clicker_finish_button.pack_forget()
+        self.gui.fixed_clicker_start_button.pack(pady=5)
+
+    def fixed_clicker(self):
+        with mouse.Controller() as mouse_controller:
+            delay = self.gui.speed_slider.get()
+
+            while self.fixed_clicking:
+                if not self.fixed_clicking:
+                    break
+
+                mouse_controller.click(mouse.Button.left, 1)
+                self.increase_clicks()
+                sleep(delay)
