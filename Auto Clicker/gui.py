@@ -30,7 +30,7 @@ class Gui(ctk.CTk):
 
     def build(self):
         self.title("Auto Clicker")
-        self.geometry("500x560")
+        self.geometry("500x580")
         self.resizable(False, False)
 
         title_container = ctk.CTkFrame(self, fg_color=self.COLORS["secondary_bg"])
@@ -143,6 +143,19 @@ class Gui(ctk.CTk):
         self.speed_slider.pack(fill="x", side="right", padx=(0, 30))
         self.speed_slider.set(5)
 
+        self.double_click_checkbox = ctk.CTkCheckBox(
+            clicker_container,
+            checkbox_width=20,
+            checkbox_height=20,
+            border_width=2,
+            text="Duplo Clique?",
+            font=self.FONTS["text"],
+            text_color=self.COLORS["text"],
+            fg_color=self.COLORS["button"],
+            hover_color=self.COLORS["button_hover"],
+        )
+        self.double_click_checkbox.pack()
+
         clicker_buttons_frame = ctk.CTkFrame(clicker_container, fg_color="transparent")
         clicker_buttons_frame.pack(fill="x", pady=5, padx=10)
 
@@ -186,7 +199,7 @@ class Gui(ctk.CTk):
         ).pack(pady=5, padx=30)
 
         fixed_clicker_buttons_frame = ctk.CTkFrame(clicker_container, fg_color="transparent")
-        fixed_clicker_buttons_frame.pack(fill="x", pady=5, padx=10)
+        fixed_clicker_buttons_frame.pack(fill="x", padx=10)
 
         self.fixed_clicker_start_button = ctk.CTkButton(
             fixed_clicker_buttons_frame,

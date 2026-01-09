@@ -2,7 +2,7 @@ import threading
 from time import sleep
 
 from CTkMessagebox import CTkMessagebox
-from pyautogui import click
+from pyautogui import click, doubleClick
 from pynput import keyboard, mouse
 
 
@@ -16,6 +16,7 @@ class Core:
         self.clicking = False
         self.fixed_clicking = False
         self.recording = False
+        self.double_click = False
 
         self.positions = []
         self.clicks_counter = 0
@@ -121,6 +122,7 @@ class Core:
             return
 
         self.clicking = True
+        self.double_click = self.gui.double_click_checkbox.get()
 
         self.gui.start_button.pack_forget()
         self.gui.finish_button.pack(side="left", padx=(70, 0))
@@ -141,14 +143,23 @@ class Core:
     def clicker(self):
         delay = self.gui.speed_slider.get()
 
-        while self.clicking:
-            for button, x, y in self.positions:
-                if not self.clicking:
-                    break
-
-                click(x, y, button=button)
-                self.increase_clicks()
-                sleep(delay)
+        if self.double_click:
+            while self.clicking:
+                for button, x, y in self.positions:
+                    if not self.clicking:
+                        break
+                    doubleClick(x, y, button=button)
+                    self.increase_clicks()
+                    self.increase_clicks()
+                    sleep(delay)
+        else:
+            while self.clicking:
+                for button, x, y in self.positions:
+                    if not self.clicking:
+                        break
+                    click(x, y, button=button)
+                    self.increase_clicks()
+                    sleep(delay)
 
     def increase_clicks(self):
         self.clicks_counter += 1
@@ -176,6 +187,7 @@ class Core:
             return
 
         self.fixed_clicking = True
+        self.double_click = self.gui.double_click_checkbox.get()
 
         self.gui.fixed_clicker_start_button.pack_forget()
         self.gui.fixed_clicker_finish_button.pack(pady=5)
@@ -194,13 +206,16 @@ class Core:
         self.gui.fixed_clicker_start_button.pack(pady=5)
 
     def fixed_clicker(self):
-        with mouse.Controller() as mouse_controller:
-            delay = self.gui.speed_slider.get()
+        delay = self.gui.speed_slider.get()
 
+        if self.double_click:
             while self.fixed_clicking:
-                if not self.fixed_clicking:
-                    break
-
-                mouse_controller.click(mouse.Button.left, 1)
+                doubleClick(button="left")
+                self.increase_clicks()
+                self.increase_clicks()
+                sleep(delay)
+        else:
+            while self.fixed_clicking:
+                click(button="left")
                 self.increase_clicks()
                 sleep(delay)
